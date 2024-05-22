@@ -5,7 +5,7 @@ import {IoMdClose} from 'react-icons/io'
 import {BsSearch} from 'react-icons/bs'
 
 import Cookies from 'js-cookie'
-
+// import statement should be sorted on the bases : packages > high hierarchy > low hierarchy
 import Loader from 'react-loader-spinner'
 
 import Header from '../Header'
@@ -62,6 +62,7 @@ class Home extends Component {
     this.setState({isPopup: false})
   }
 
+  // naming can be improve : method which render something 'render' keyword should be used as prefix
   addPopup = () => (
     <GetPremium data-testid="banner">
       <CloseButton
@@ -105,7 +106,7 @@ class Home extends Component {
   getVideos = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
     const {searchInput} = this.state
-
+    // restrict n/w call when data is already fetched 
     const jwtToken = Cookies.get('jwt_token')
     const url = `https://apis.ccbp.in/videos/all?search=${searchInput}`
 
@@ -152,6 +153,7 @@ class Home extends Component {
               src="https://assets.ccbp.in/frontend/react-js/nxt-watch-no-search-results-img.png"
               alt="no videos"
             />
+            {/* no need to pass theme separatly to the styled components, can user directly in style component */}
             <FailureText theme={theme}>No search results found</FailureText>
             <FailureText theme={theme}>
               Try different key words or remove search filter

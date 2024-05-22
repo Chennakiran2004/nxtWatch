@@ -51,6 +51,8 @@ class Header extends Component {
             history.replace('/login')
           }
 
+          // divide the below code in individual methods
+
           return (
             <>
               <NavMobileContainer theme={theme}>

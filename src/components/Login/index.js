@@ -18,6 +18,7 @@ import {
   ErrorMsg,
 } from './styledComponents'
 
+// keep the constant values in constant file
 const websiteLogo =
   'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
 
@@ -48,6 +49,7 @@ class Login extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
+    // create storage utils to maintain storage related methods
     Cookies.set('jwt_token', jwtToken, {expires: 30})
     history.replace('/')
     this.setState({isError: false})
@@ -57,6 +59,7 @@ class Login extends Component {
     event.preventDefault()
     const {username, password} = this.state
     const userDetails = {username, password}
+    // create a common util for fetch calls
     const apiUrl = 'https://apis.ccbp.in/login'
 
     const options = {
@@ -88,6 +91,7 @@ class Login extends Component {
           <WebsiteLogo src={websiteLogo} alt="website logo" />
           <Form onSubmit={this.onSubmit}>
             <Label htmlFor="username">USERNAME</Label>
+            {/* add validation for input fields */}
             <LoginInput
               type="text"
               id="username"
@@ -103,6 +107,7 @@ class Login extends Component {
               value={password}
               type={passwordType}
             />
+            {/* instead of raw html tag use input styled component  */}
             <input
               type="checkbox"
               id="showPassword"

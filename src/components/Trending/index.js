@@ -29,6 +29,7 @@ const apiStatusConstants = {
   inProgress: 'IN_PROGRESS',
 }
 
+// discuss : why class component instead of funcitonal ?
 class Trending extends Component {
   state = {
     videosList: [],
@@ -55,6 +56,7 @@ class Trending extends Component {
     const data = await response.json()
 
     if (response.ok === true) {
+      // create a method to conver api response data to below format
       const updatedData = data.videos.map(eachItem => ({
         id: eachItem.id,
         channel: {
@@ -133,6 +135,7 @@ class Trending extends Component {
     </ThemeContext.Consumer>
   )
 
+  // create a failure view component with props what image to show, retry functionality 
   checkApiStatus = () => {
     const {apiStatus} = this.state
 
@@ -154,7 +157,7 @@ class Trending extends Component {
         {value => {
           const {isDarkTheme} = value
           const theme = isDarkTheme ? 'dark' : 'light'
-
+          // rendering Header and Sidebar in every individual page , create a common component to render these common UI
           return (
             <TrendingMainContainer data-testid="trending" theme={theme}>
               <Header />

@@ -127,6 +127,7 @@ class Gaming extends Component {
     </ThemeContext.Consumer>
   )
 
+  // naming can be imporved : renderUIBasedOnAPIStatus
   checkApiStatus = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
@@ -137,7 +138,7 @@ class Gaming extends Component {
       case apiStatusConstants.inProgress:
         return this.loader()
       default:
-        return null
+        return null //return fragment (<></>) instead of null
     }
   }
 

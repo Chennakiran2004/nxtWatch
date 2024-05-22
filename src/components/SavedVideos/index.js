@@ -31,6 +31,7 @@ class SavedVideos extends Component {
     const {isDarkTheme} = themeValue
     const theme = isDarkTheme ? 'dark' : 'light'
 
+    // divide below methods to separate render methods 
     return (
       <SavedVideosContext.Consumer>
         {value => {
