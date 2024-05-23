@@ -11,10 +11,12 @@ import {
   VideoDetailsText,
 } from './styledComponents'
 
+// naming can be improved : GamingCardBody 
 const GamingBody = props => {
   const {gameDetails} = props
   const {thumbnailUrl, viewCount, title, id} = gameDetails
 
+  // improve the naming renderGamingCardBody
   const card = value => {
     const {isDarkTheme} = value
     const theme = isDarkTheme ? 'dark' : 'light'

@@ -26,6 +26,7 @@ import SavedVideos from './components/SavedVideos'
 
 import NotFound from './components/NotFound'
 
+//keep constant in separate file
 const activeMenuConstants = {
   initial: 'INITIAL',
   home: 'HOME',
@@ -75,6 +76,7 @@ class App extends Component {
     )
   }
 
+  // naming can be proved : toggleTheme
   changeTheme = () => {
     this.setState(prev => ({isDarkTheme: !prev.isDarkTheme}))
   }

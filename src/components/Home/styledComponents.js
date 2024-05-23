@@ -67,6 +67,7 @@ export const CloseButton = styled.button`
 export const SearchInput = styled.input`
   height: 30px;
   flex-grow: 1;
+  // take colors values from theme object passed in themeProvider
   border: 1px solid ${props => (props.theme === 'dark' ? '#f9f9f9' : '#181818')};
   color: ${props => (props.theme === 'dark' ? '#f9f9f9' : '#181818')};
   padding-left: 10px;

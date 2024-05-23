@@ -23,6 +23,7 @@ const MenuItemsList = () => {
     const {isDarkTheme} = value
     const theme = isDarkTheme ? 'dark' : 'light'
 
+    // maintain whole menu in constant list and a method to render individual menuLink based on constant
     return (
       <ActiveMenuContext.Consumer>
         {activeMenuValue => {
