@@ -1,10 +1,13 @@
-import Header from '../Header'
-import Sidebar from '../Sidebar'
 import ThemeContext from '../../Context/ThemeContext'
 
+import Layout from '../Layout'
+
 import {
-  MainBody,
-  SidebarContainer,
+  darkThemeFailureImgUrl,
+  lightThemeFailureImgUrl,
+} from '../../Constants/logoUrl'
+
+import {
   NotFoundImage,
   NotFoundContainer,
   NotFoundText,
@@ -17,25 +20,19 @@ const NotFound = () => (
       const theme = isDarkTheme ? 'dark' : 'light'
 
       const imgUrl = isDarkTheme
-        ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-dark-theme-img.png'
-        : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-not-found-light-theme-img.png'
+        ? darkThemeFailureImgUrl
+        : lightThemeFailureImgUrl
 
       return (
-        <div>
-          <Header />
-          <MainBody>
-            <SidebarContainer>
-              <Sidebar />
-            </SidebarContainer>
-            <NotFoundContainer theme={theme}>
-              <NotFoundImage src={imgUrl} alt="not found" />
-              <NotFoundText theme={theme}>Page Not Found</NotFoundText>
-              <NotFoundText theme={theme}>
-                we are sorry, the page you requested could not be found.
-              </NotFoundText>
-            </NotFoundContainer>
-          </MainBody>
-        </div>
+        <Layout>
+          <NotFoundContainer theme={theme}>
+            <NotFoundImage src={imgUrl} alt="not found" />
+            <NotFoundText theme={theme}>Page Not Found</NotFoundText>
+            <NotFoundText theme={theme}>
+              We are sorry, the page you requested could not be found.
+            </NotFoundText>
+          </NotFoundContainer>
+        </Layout>
       )
     }}
   </ThemeContext.Consumer>

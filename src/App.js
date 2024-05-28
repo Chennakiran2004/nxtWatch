@@ -75,7 +75,7 @@ class App extends Component {
     )
   }
 
-  changeTheme = () => {
+  toggleTheme = () => {
     this.setState(prev => ({isDarkTheme: !prev.isDarkTheme}))
   }
 
@@ -87,7 +87,7 @@ class App extends Component {
     const {activeMenu, isDarkTheme, save, savedVideosList} = this.state
     return (
       <ThemeContext.Provider
-        value={{isDarkTheme, changeTheme: this.changeTheme}}
+        value={{isDarkTheme, toggleTheme: this.toggleTheme}}
       >
         <SavedVideosContext.Provider
           value={{

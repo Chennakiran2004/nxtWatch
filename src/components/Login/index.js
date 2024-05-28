@@ -2,7 +2,7 @@ import {Component} from 'react'
 
 import {Redirect} from 'react-router-dom'
 
-import Cookies from 'js-cookie'
+import {setCookie, getCookie} from '../../Constants/StorageUtilities'
 
 import './index.css'
 
@@ -17,6 +17,7 @@ import {
   LoginInput,
   ErrorMsg,
 } from './styledComponents'
+import fetchApi from '../../Constants/fetchUtilities'
 
 const websiteLogo =
   'https://assets.ccbp.in/frontend/react-js/nxt-watch-logo-light-theme-img.png'
@@ -48,7 +49,7 @@ class Login extends Component {
 
   onSubmitSuccess = jwtToken => {
     const {history} = this.props
-    Cookies.set('jwt_token', jwtToken, {expires: 30})
+    setCookie('jwt_token', jwtToken, {expires: 30})
     history.replace('/')
     this.setState({isError: false})
   }
@@ -64,20 +65,22 @@ class Login extends Component {
       body: JSON.stringify(userDetails),
     }
 
-    const response = await fetch(apiUrl, options)
-    const data = await response.json()
+    // const response = await fetch(apiUrl, options)
+    // const data = await response.json()
 
-    if (response.ok === true) {
-      this.onSubmitSuccess(data.jwt_token)
+    const response = await fetchApi(apiUrl, options)
+
+    if (response.success) {
+      this.onSubmitSuccess(response.data.jwt_token)
     } else {
-      this.onSubmitFailure(data.error_msg)
+      this.onSubmitFailure(response.data.error_msg)
     }
   }
 
   render() {
     const {username, password, passwordType, isError, errorMsg} = this.state
 
-    const jwtToken = Cookies.get('jwt_token')
+    const jwtToken = getCookie()
 
     if (jwtToken !== undefined) {
       return <Redirect to="/" />

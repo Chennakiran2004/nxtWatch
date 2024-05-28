@@ -1,17 +1,27 @@
 import {Component} from 'react'
+
 import {IoLogoGameControllerB} from 'react-icons/io'
+
 import Loader from 'react-loader-spinner'
-import Cookies from 'js-cookie'
+
 import ThemeContext from '../../Context/ThemeContext'
-import Header from '../Header'
-import Sidebar from '../Sidebar'
 
 import GamingBody from '../GamingBody'
+
+import apiStatusConstants from '../../Constants/apiStatusConstants'
+
+import Layout from '../Layout'
+
+import {
+  darkThemeFailureImgUrl,
+  lightThemeFailureImgUrl,
+} from '../../Constants/logoUrl'
+
+import getAuthHeaders from '../../Constants/getAuthHeaders'
 
 import {
   GamingMainContainer,
   MainBody,
-  SidebarContainer,
   GamingContainer,
   GamingMenuContainer,
   IconContainer,
@@ -24,12 +34,9 @@ import {
   RetryButton,
 } from './styledComponents'
 
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
+import {getCookie} from '../../Constants/StorageUtilities'
+
+import fetchApi from '../../Constants/fetchUtilities'
 
 class Gaming extends Component {
   state = {apiStatus: apiStatusConstants.initial, videosList: []}
@@ -60,20 +67,18 @@ class Gaming extends Component {
   getVideos = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
 
-    const jwtToken = Cookies.get('jwt_token')
+    const jwtToken = getCookie()
+
     const url = 'https://apis.ccbp.in/videos/gaming'
     const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
+      headers: getAuthHeaders(jwtToken),
       method: 'GET',
     }
 
-    const response = await fetch(url, options)
-    const data = await response.json()
+    const response = await fetchApi(url, options)
 
-    if (response.ok) {
-      const updatedData = data.videos.map(eachItem => ({
+    if (response.success) {
+      const updatedData = response.data.videos.map(eachItem => ({
         id: eachItem.id,
         thumbnailUrl: eachItem.thumbnail_url,
         title: eachItem.title,
@@ -106,8 +111,8 @@ class Gaming extends Component {
         const {isDarkTheme} = value
         const theme = isDarkTheme ? 'dark' : 'light'
         const imgUrl = isDarkTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+          ? darkThemeFailureImgUrl
+          : lightThemeFailureImgUrl
 
         return (
           <FailureContainer>
@@ -127,7 +132,7 @@ class Gaming extends Component {
     </ThemeContext.Consumer>
   )
 
-  checkApiStatus = () => {
+  renderUIBasedOnAPIStatus = () => {
     const {apiStatus} = this.state
     switch (apiStatus) {
       case apiStatusConstants.success:
@@ -137,7 +142,7 @@ class Gaming extends Component {
       case apiStatusConstants.inProgress:
         return this.loader()
       default:
-        return null
+        return <></>
     }
   }
 
@@ -148,23 +153,23 @@ class Gaming extends Component {
           const {isDarkTheme} = value
           const theme = isDarkTheme ? 'dark' : 'light'
           return (
-            <GamingMainContainer data-testid="gaming" theme={theme}>
-              <Header />
-              <MainBody>
-                <SidebarContainer>
-                  <Sidebar />
-                </SidebarContainer>
-                <GamingContainer>
-                  <GamingMenuContainer theme={theme}>
-                    <IconContainer theme={theme}>
-                      <IoLogoGameControllerB size={40} color="#ff0b37" />
-                    </IconContainer>
-                    <MenuHeading theme={theme}>Gaming</MenuHeading>
-                  </GamingMenuContainer>
-                  {this.checkApiStatus()}
-                </GamingContainer>
-              </MainBody>
-            </GamingMainContainer>
+            <>
+              <Layout>
+                <GamingMainContainer data-testid="gaming" theme={theme}>
+                  <MainBody>
+                    <GamingContainer>
+                      <GamingMenuContainer theme={theme}>
+                        <IconContainer theme={theme}>
+                          <IoLogoGameControllerB size={40} color="#ff0b37" />
+                        </IconContainer>
+                        <MenuHeading theme={theme}>Gaming</MenuHeading>
+                      </GamingMenuContainer>
+                      {this.renderUIBasedOnAPIStatus()}
+                    </GamingContainer>
+                  </MainBody>
+                </GamingMainContainer>
+              </Layout>
+            </>
           )
         }}
       </ThemeContext.Consumer>

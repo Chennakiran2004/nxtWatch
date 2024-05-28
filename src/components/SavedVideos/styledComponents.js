@@ -20,7 +20,7 @@ export const SidebarContainer = styled.div`
 `
 
 export const SavedVideosContainer = styled.div`
-  height: 90vh;
+  height: 92vh;
   overflow-x: auto;
 
   flex-grow: 1;

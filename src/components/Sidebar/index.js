@@ -3,6 +3,7 @@ import {Component} from 'react'
 import MenuItemsList from '../MenuItemsList'
 
 import ThemeContext from '../../Context/ThemeContext'
+
 import {
   SidebarContainer,
   LogoIcons,

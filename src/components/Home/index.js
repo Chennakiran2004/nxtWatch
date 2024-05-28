@@ -1,25 +1,34 @@
 import {Component} from 'react'
 
+import Loader from 'react-loader-spinner'
+
 import {IoMdClose} from 'react-icons/io'
 
 import {BsSearch} from 'react-icons/bs'
 
-import Cookies from 'js-cookie'
-
-import Loader from 'react-loader-spinner'
-
-import Header from '../Header'
-
-import Sidebar from '../Sidebar'
+import ThemeContext from '../../Context/ThemeContext'
 
 import HomeBody from '../HomeBody'
 
-import ThemeContext from '../../Context/ThemeContext'
+import apiStatusConstants from '../../Constants/apiStatusConstants'
+
+import Layout from '../Layout'
+
+import {
+  darkThemeFailureImgUrl,
+  lightThemeFailureImgUrl,
+} from '../../Constants/logoUrl'
+
+import {getCookie} from '../../Constants/StorageUtilities'
+
+import fetchApi from '../../Constants/fetchUtilities'
+
+import getAuthHeaders from '../../Constants/getAuthHeaders'
+
+import {VIDEO_SEARCH_API} from '../../Constants/videoSearchAPI'
 
 import {
   HomeMainContainer,
-  MainBody,
-  SidebarContainer,
   HomeContainer,
   SearchContainer,
   SearchInput,
@@ -39,13 +48,6 @@ import {
   FailureImg,
 } from './styledComponents'
 
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
-
 class Home extends Component {
   state = {
     isPopup: true,
@@ -62,7 +64,7 @@ class Home extends Component {
     this.setState({isPopup: false})
   }
 
-  addPopup = () => (
+  renderAddPopup = () => (
     <GetPremium data-testid="banner">
       <CloseButton
         type="button"
@@ -106,21 +108,19 @@ class Home extends Component {
     this.setState({apiStatus: apiStatusConstants.inProgress})
     const {searchInput} = this.state
 
-    const jwtToken = Cookies.get('jwt_token')
-    const url = `https://apis.ccbp.in/videos/all?search=${searchInput}`
+    const jwtToken = getCookie()
+
+    const url = `${VIDEO_SEARCH_API}${searchInput}`
 
     const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
+      headers: getAuthHeaders(jwtToken),
       method: 'GET',
     }
 
-    const response = await fetch(url, options)
-    const data = await response.json()
+    const response = await fetchApi(url, options)
 
-    if (response.ok === true) {
-      const updatedData = data.videos.map(eachItem => ({
+    if (response.success) {
+      const updatedData = response.data.videos.map(eachItem => ({
         id: eachItem.id,
         channel: {
           name: eachItem.channel.name,
@@ -182,7 +182,7 @@ class Home extends Component {
     )
   }
 
-  checkApiStatus = () => {
+  renderUIBasedOnAPIStatus = () => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
@@ -203,8 +203,8 @@ class Home extends Component {
         const {isDarkTheme} = value
         const theme = isDarkTheme ? 'dark' : 'light'
         const imgUrl = isDarkTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
+          ? darkThemeFailureImgUrl
+          : lightThemeFailureImgUrl
 
         return (
           <FailureContainer>
@@ -232,36 +232,35 @@ class Home extends Component {
           const {isDarkTheme} = value
           const theme = isDarkTheme ? 'dark' : 'light'
           const color = isDarkTheme ? '#f9f9f9' : '#181818'
+          console.log(theme)
           return (
-            <HomeMainContainer data-testid="home" theme={theme}>
-              <Header />
-              <MainBody>
-                <SidebarContainer>
-                  <Sidebar />
-                </SidebarContainer>
-                <HomeContainer>
-                  {isPopup && this.addPopup()}
-                  <SearchContainer>
-                    <SearchInput
-                      theme={theme}
-                      type="search"
-                      placeholder="Search"
-                      onChange={this.updateSearchInput}
-                      value={searchInput}
-                    />
-                    <SearchButton
-                      theme={theme}
-                      type="button"
-                      data-testid="searchButton"
-                      onClick={this.getVideos}
-                    >
-                      <BsSearch color={color} />
-                    </SearchButton>
-                  </SearchContainer>
-                  {this.checkApiStatus()}
-                </HomeContainer>
-              </MainBody>
-            </HomeMainContainer>
+            <>
+              <Layout>
+                <HomeMainContainer theme={theme}>
+                  <HomeContainer theme={theme}>
+                    {isPopup && this.renderAddPopup()}
+                    <SearchContainer>
+                      <SearchInput
+                        theme={theme}
+                        type="search"
+                        placeholder="Search"
+                        onChange={this.updateSearchInput}
+                        value={searchInput}
+                      />
+                      <SearchButton
+                        theme={theme}
+                        type="button"
+                        data-testid="searchButton"
+                        onClick={this.getVideos}
+                      >
+                        <BsSearch color={color} />
+                      </SearchButton>
+                    </SearchContainer>
+                    {this.renderUIBasedOnAPIStatus()}
+                  </HomeContainer>
+                </HomeMainContainer>
+              </Layout>
+            </>
           )
         }}
       </ThemeContext.Consumer>

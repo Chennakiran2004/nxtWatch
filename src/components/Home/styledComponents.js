@@ -97,6 +97,8 @@ export const VideosList = styled.ul`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  overflow-x: scroll;
+  height: 60.1vh;
 `
 
 export const LoaderContainer = styled.div`

@@ -50,7 +50,7 @@ export const LoaderContainer = styled.div`
 `
 
 export const VideoItemDetailsContainer = styled.div`
-  height: 90vh;
+  height: 92vh;
   overflow-x: auto;
   background-color: ${props =>
     props.theme === 'dark' ? '#0f0f0f' : '#f9f9f9'};
@@ -58,7 +58,7 @@ export const VideoItemDetailsContainer = styled.div`
   padding: 15px;
   padding-bottom: 30px;
   @media screen and (max-width: 768px) {
-    min-height: 90vh;
+    min-height: 92vh;
   }
 `
 

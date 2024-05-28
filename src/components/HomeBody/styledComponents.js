@@ -10,7 +10,7 @@ export const VideoCardContainer = styled.li`
   @media screen and (min-width: 768px) {
     width: 33%;
     padding: 5px;
-    height: 100%;
+    // height: 100%;
   }
 `
 

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 export const VideoCardContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+  //   width: 100%;
   @media screen and (min-width: 576px) {
     padding: 5px;
     flex-direction: row;

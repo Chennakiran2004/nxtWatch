@@ -11,11 +11,11 @@ import {
   VideoDetailsText,
 } from './styledComponents'
 
-const GamingBody = props => {
+const GamingCardBody = props => {
   const {gameDetails} = props
   const {thumbnailUrl, viewCount, title, id} = gameDetails
 
-  const card = value => {
+  const renderGamingCardBody = value => {
     const {isDarkTheme} = value
     const theme = isDarkTheme ? 'dark' : 'light'
     return (
@@ -49,7 +49,11 @@ const GamingBody = props => {
     )
   }
 
-  return <ThemeContext.Consumer>{value => card(value)}</ThemeContext.Consumer>
+  return (
+    <ThemeContext.Consumer>
+      {value => renderGamingCardBody(value)}
+    </ThemeContext.Consumer>
+  )
 }
 
-export default GamingBody
+export default GamingCardBody

@@ -6,16 +6,10 @@ import ThemeContext from '../../Context/ThemeContext'
 
 import SavedVideosContext from '../../Context/SavedVideosContext'
 
-import Header from '../Header'
-
-import Sidebar from '../Sidebar'
-
 import TrendingVideoCard from '../TrendingVideoCard'
 
 import {
   SavedVideosMainContainer,
-  MainBody,
-  SidebarContainer,
   SavedVideosContainer,
   SavedMenuContainer,
   IconContainer,
@@ -25,6 +19,7 @@ import {
   FailureText,
   VideosList,
 } from './styledComponents'
+import Layout from '../Layout'
 
 class SavedVideos extends Component {
   savedList = themeValue => {
@@ -71,23 +66,21 @@ class SavedVideos extends Component {
           const theme = isDarkTheme ? 'dark' : 'light'
 
           return (
-            <SavedVideosMainContainer theme={theme}>
-              <Header />
-              <MainBody>
-                <SidebarContainer>
-                  <Sidebar />
-                </SidebarContainer>
-                <SavedVideosContainer>
-                  <SavedMenuContainer theme={theme}>
-                    <IconContainer theme={theme}>
-                      <RiMenuAddLine size={40} color="#ff0b37" />
-                    </IconContainer>
-                    <MenuHeading theme={theme}>Saved Videos</MenuHeading>
-                  </SavedMenuContainer>
-                  {this.savedList(value)}
-                </SavedVideosContainer>
-              </MainBody>
-            </SavedVideosMainContainer>
+            <>
+              <Layout>
+                <SavedVideosMainContainer theme={theme}>
+                  <SavedVideosContainer>
+                    <SavedMenuContainer theme={theme}>
+                      <IconContainer theme={theme}>
+                        <RiMenuAddLine size={40} color="#ff0b37" />
+                      </IconContainer>
+                      <MenuHeading theme={theme}>Saved Videos</MenuHeading>
+                    </SavedMenuContainer>
+                    {this.savedList(value)}
+                  </SavedVideosContainer>
+                </SavedVideosMainContainer>
+              </Layout>
+            </>
           )
         }}
       </ThemeContext.Consumer>

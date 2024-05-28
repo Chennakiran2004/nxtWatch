@@ -1,14 +1,28 @@
 import {Component} from 'react'
+
 import {AiFillFire} from 'react-icons/ai'
+
 import Loader from 'react-loader-spinner'
-import Cookies from 'js-cookie'
-import Header from '../Header'
-import Sidebar from '../Sidebar'
+
+import {getCookie} from '../../Constants/StorageUtilities'
+
 import TrendingVideoCard from '../TrendingVideoCard'
+
 import ThemeContext from '../../Context/ThemeContext'
+
+import apiStatusConstants from '../../Constants/apiStatusConstants'
+
+import {
+  darkThemeFailureImgUrl,
+  lightThemeFailureImgUrl,
+} from '../../Constants/logoUrl'
+
+import Layout from '../Layout'
+
+import getAuthHeaders from '../../Constants/getAuthHeaders'
+
 import {
   MainBody,
-  SidebarContainer,
   TrendingContainer,
   TrendingMenuContainer,
   IconContainer,
@@ -21,13 +35,6 @@ import {
   VideosList,
   TrendingMainContainer,
 } from './styledComponents'
-
-const apiStatusConstants = {
-  initial: 'INITIAL',
-  success: 'SUCCESS',
-  failure: 'FAILURE',
-  inProgress: 'IN_PROGRESS',
-}
 
 class Trending extends Component {
   state = {
@@ -42,12 +49,10 @@ class Trending extends Component {
   getVideos = async () => {
     this.setState({apiStatus: apiStatusConstants.inProgress})
 
-    const jwtToken = Cookies.get('jwt_token')
+    const jwtToken = getCookie('jwt_token')
     const url = 'https://apis.ccbp.in/videos/trending'
     const options = {
-      headers: {
-        Authorization: `Bearer ${jwtToken}`,
-      },
+      headers: getAuthHeaders(jwtToken),
       method: 'GET',
     }
 
@@ -95,9 +100,8 @@ class Trending extends Component {
         const {isDarkTheme} = value
         const theme = isDarkTheme ? 'dark' : 'light'
         const imgUrl = isDarkTheme
-          ? 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-dark-theme-img.png'
-          : 'https://assets.ccbp.in/frontend/react-js/nxt-watch-failure-view-light-theme-img.png'
-
+          ? darkThemeFailureImgUrl
+          : lightThemeFailureImgUrl
         return (
           <FailureContainer>
             <FailureImg src={imgUrl} alt="failure view" />
@@ -133,7 +137,7 @@ class Trending extends Component {
     </ThemeContext.Consumer>
   )
 
-  checkApiStatus = () => {
+  renderUIBasedOnaAPIStatue = () => {
     const {apiStatus} = this.state
 
     switch (apiStatus) {
@@ -144,7 +148,7 @@ class Trending extends Component {
       case apiStatusConstants.inProgress:
         return this.loader()
       default:
-        return null
+        return <></>
     }
   }
 
@@ -156,23 +160,23 @@ class Trending extends Component {
           const theme = isDarkTheme ? 'dark' : 'light'
 
           return (
-            <TrendingMainContainer data-testid="trending" theme={theme}>
-              <Header />
-              <MainBody>
-                <SidebarContainer>
-                  <Sidebar />
-                </SidebarContainer>
-                <TrendingContainer>
-                  <TrendingMenuContainer theme={theme}>
-                    <IconContainer theme={theme}>
-                      <AiFillFire size={40} color="#ff0b37" />
-                    </IconContainer>
-                    <MenuHeading theme={theme}>Trending</MenuHeading>
-                  </TrendingMenuContainer>
-                  {this.checkApiStatus()}
-                </TrendingContainer>
-              </MainBody>
-            </TrendingMainContainer>
+            <>
+              <Layout>
+                <TrendingMainContainer data-testid="trending" theme={theme}>
+                  <MainBody>
+                    <TrendingContainer>
+                      <TrendingMenuContainer theme={theme}>
+                        <IconContainer theme={theme}>
+                          <AiFillFire size={40} color="#ff0b37" />
+                        </IconContainer>
+                        <MenuHeading theme={theme}>Trending</MenuHeading>
+                      </TrendingMenuContainer>
+                      {this.renderUIBasedOnaAPIStatue()}
+                    </TrendingContainer>
+                  </MainBody>
+                </TrendingMainContainer>
+              </Layout>
+            </>
           )
         }}
       </ThemeContext.Consumer>
