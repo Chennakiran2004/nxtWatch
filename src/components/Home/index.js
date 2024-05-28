@@ -25,7 +25,7 @@ import fetchApi from '../../Constants/fetchUtilities'
 
 import getAuthHeaders from '../../Constants/getAuthHeaders'
 
-import {VIDEO_SEARCH_API} from '../../Constants/videoSearchAPI'
+// import {VIDEO_SEARCH_API} from '../../Constants/videoSearchAPI'
 
 import {
   HomeMainContainer,
@@ -110,7 +110,7 @@ class Home extends Component {
 
     const jwtToken = getCookie()
 
-    const url = `${VIDEO_SEARCH_API}${searchInput}`
+    const url = `https://apis.ccbp.in/videos/all?search=${searchInput}`
 
     const options = {
       headers: getAuthHeaders(jwtToken),
